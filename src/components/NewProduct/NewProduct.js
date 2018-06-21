@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addProduct } from '../../redux/ducks/productsReducer';
 import axios from 'axios';
 
 class NewProduct extends Component {
@@ -17,19 +19,8 @@ class NewProduct extends Component {
     e.preventDefault();
     const { name, description, price, image_url } = this.state;
     if (name && description && price && image_url) {
-      axios
-        .post('/api/products', {
-          name,
-          description,
-          price,
-          image_url
-        })
-        .then(response => {
-          console.log(response.data);
-        })
-        .catch(response => {
-          console.log(response);
-        });
+      this.props.addProduct({ name, description, price, image_url });
+      this.props.history.replace('/products');
     }
   };
 
@@ -72,4 +63,11 @@ class NewProduct extends Component {
   }
 }
 
-export default NewProduct;
+const mapStateToProps = state => {
+  return state;
+};
+
+export default connect(
+  mapStateToProps,
+  { addProduct }
+)(NewProduct);

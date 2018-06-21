@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { getProducts } from '../../redux/ducks/productsReducer';
 
 class Products extends Component {
   componentDidMount() {
-    axios.get('/api/products').then(response => {
-      console.log(response.data);
-    });
+    this.props.getProducts();
   }
   render() {
-    return <div />;
+    const { isLoading, products } = this.props;
+    const productsDisplay = isLoading ? (
+      <p>Loading...</p>
+    ) : (
+      products.map(product => {
+        return <p>{product.name}</p>;
+      })
+    );
+
+    return <div>{productsDisplay}</div>;
   }
 }
 
-export default Products;
+const mapStateToProps = state => {
+  return state;
+};
+
+export default connect(
+  mapStateToProps,
+  { getProducts }
+)(Products);
